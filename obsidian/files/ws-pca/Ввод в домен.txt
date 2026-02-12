@@ -1,0 +1,21 @@
+Ссылка на wiki https://redos.red-soft.ru/base/redos-8_0/8_0-administation/8_0-domain-redos/8_0-installation-ipa/8_0-redos-in-ipa/?nocache=1738611434223
+
+Установим:
+hostnamectl set-hostnamectl ws-pca.ad.greenlab.local
+dnf install ipa-client
+
+
+Важный момент!!! Ввод в домен вызвал бы у Вас ошибку в строке с регэкспом.
+Пролечить можно следующим образом:
+
+Внести изменения в файл /usr/lib/python3.6/site-packages/ipalib/constants.py или в /usr/lib64/python3/site-packages/ipalib/constants.py, если есть.
+
+Найти и закомментировать (добавить в начало символ #) строку:
+#NAME_REGEX = r'^[a-z][_a-z0-9]*[a-z0-9]$|^[a-z]$'
+
+Добавить строки:
+NAME_REGEX = r'[a-z][_a-z0-9\-]*[a-z0-9]$|[a-z]$'
+
+После этого без проблем вводим в домен
+
+ipa-client-install --mkhomedir

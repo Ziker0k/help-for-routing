@@ -1,0 +1,31 @@
+https://www.exploit-db.com/apps/d8329e2dbb14e0fe8ec101708721228f-blog-1.3.zip
+
+Зачистка мусора:
+wget https://www.exploit-db.com/apps/d8329e2dbb14e0fe8ec101708721228f-blog-1.3.zip -O blog.zip
+unzip blog.zip
+mkdir corpblog
+mv blog-1.3 /corpblog
+rm /corpblog/favicon.ico
+rm /corpblog/README.md
+rm /corpblog/LICENSE
+
+Изменить config.ini (изменить имя пользователя и имя блога), index.php (удалить ссылку на гит и имя мирослава)
+
+
+
+Сборка контейнера и сохранение в tar:
+docker build -t gs/corpblog:latest .
+docker pull mariadb:10.1
+docker save -o blog.tar gs/blog:latest
+docker save -o mariadb10-1.tar mariadb:10.1
+
+
+
+
+Настройка базы:
+CREATE DATABASE fus_db;
+CREATE USER 'fus_user'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+GRANT ALL PRIVILEGES ON fus_db.* TO 'fus_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
